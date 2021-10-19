@@ -1,0 +1,827 @@
+.product-detail-page{
+    padding: 34px 0;
+    background: #fff;
+    .container{
+        .row{
+            .col-lg-12{
+                .row{
+                    .product-info{
+                        width: 100%;
+                        float: left;
+                        position: relative;
+                        .img{
+                            position: relative;
+                            float: left;
+                            display: inline-block;
+                            vertical-align: top;
+                            height: 340px;
+                            width: 320px;
+                            margin-right: 24px;
+                            border-radius: 4px;
+                            background-color: #F3EDED;
+                            .show-img{
+                                background-position: center;
+                                background-repeat: no-repeat;
+                                width: 100%;
+                                height: 100%;
+                                margin: 0 auto;
+                                background-size: auto 330px;
+                            }
+                            .loading{
+                                position: absolute;
+                                top: 45%;
+                                left: 41%;
+                                color: #AB4949;
+                            }
+                        }
+                        .info{
+                            position: relative;
+                            float: left;
+                            width: calc(100% - 344px);
+                            min-height: 300px;
+                            .loading{
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                color: #AB4949;
+                            }
+                            p{
+                                margin-bottom: 0;
+                            }
+                            .title{
+                                width: 100%;
+                                float: left;
+                                font-size: 32px;
+                                font-weight: 600;
+                                padding-bottom: 16px;
+                                margin-bottom: 0;
+                                color: #413737;
+                            }
+                            .region{
+                                width: 100%;
+                                float: left;
+                                font-size: 20px;
+                                color: #544848;
+                                padding-bottom: 16px;
+                            }
+                            .country-wine-type{
+                                width: 100%;
+                                float: left;
+                                padding-bottom: 16px;
+                                .country{
+                                    font-size: 20px;
+                                    color: #544848;
+                                    margin-right: 24px;
+                                    float: left;
+                                    img{
+                                        width: 24px;
+                                        height: 24px;
+                                        border-radius: 50%;
+                                        margin-right: 8px;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                                .wine-type{
+                                    font-size: 20px;
+                                    color: #544848;
+                                    float: left;
+                                    span::after{
+                                        content: "";
+                                        width: 24px;
+                                        height: 24px;
+                                        top: 0;
+                                        right: 0;
+                                        position: relative;
+                                        display: inline-block;
+                                        border-radius: 50%;
+                                        float: left;
+                                        margin-right: 8px;
+                                    }
+                                    span.white::after{
+                                        background: #fff;
+                                        border:1px solid #e4e4e4;
+                                    }
+                                    span.red::after{
+                                        background: #BF3664;
+                                    }
+                                    span.rose::after{
+                                        background: #E6568D;
+                                    }
+                                    span.sparkling::after{
+                                        background: #EFB044;
+                                    }
+                                }
+                            }
+                            .price{
+                                padding-top: 6px;
+                                font-size: 24px;
+                                color: #AB4949;
+                                font-weight: 600;
+                                padding-bottom: 16px;
+                            }
+                            .rating{
+                                padding-bottom: 24px;
+                                font-size: 20px;
+                                color: #444444;
+                                cursor: pointer;
+                                i{
+                                    margin-right: 3px;
+                                }
+                                i:last-child{
+                                    margin-right: 0;
+                                }
+                                em{
+                                    font-size: 16px;
+                                    color: #888484;
+                                }
+                            }
+                            .food{
+                                font-size: 18px;
+                                color: #544848;
+                                span{
+                                    margin-right: 24px;
+                                }
+                                span:last-child{
+                                    margin-right: 0;
+                                }
+                            }
+                        }
+                    }
+                    .product-shop{
+                        width: 100%;
+                        float: left;
+                        padding-top: 32px;
+                        position: relative;
+                        .content-top{
+                            width: 100%;
+                            float: left;
+                            .title{
+                                color: #AB4949;
+                                font-size: 20px;
+                                font-weight: 600;
+                                float: left;
+                                padding-bottom: 24px;
+                                margin-bottom: 0;
+                            }
+                            span{
+                                font-size: 16px;
+                                color: #4A3F3F;
+                                float: right;
+                                b{
+                                    a{
+                                        color: #AB4949;
+                                    }
+                                }
+                            }
+                            .how-to-buy{
+                                cursor: pointer;
+                                float: left;
+                            }
+                        }
+                        .list-shop{
+                            width: 100%;
+                            float: left;
+                            position: relative;
+                            .row{
+                                .shop-grid{
+                                    padding-left: 15px;
+                                    padding-right: 15px;
+                                    padding-bottom: 16px;
+                                    display: grid;
+                                    grid-template-columns: repeat(2, 1fr);
+                                    grid-gap: 20px;
+                                    grid-auto-rows: auto;
+                                    .shop{
+                                        border: 1px solid #E7E0DC;
+                                        padding: 10px 16px;
+                                        border-radius: 4px;
+                                        background-color: #FFFFFF;
+                                        position: relative;
+                                        width: 100%;
+                                        float: left;
+                                        .name{
+                                            color: #413737;
+                                            font-size: 16px;
+                                            font-weight: 600;
+                                            margin-bottom: 0;
+                                            width: calc(100% - 80px);
+                                            float: left;
+                                        }
+                                        .name-in-the-shop{
+                                            width: calc(100% - 80px);
+                                            font-size: 14px;
+                                            color: #413737;
+                                            float: left;
+                                        }
+                                        .address{
+                                            font-size: 14px;
+                                            color: #413737;
+                                            width: 100%;
+                                            float: left;
+                                        }
+                                        .btn{
+                                            height: 40px;
+                                            line-height: 1.1;
+                                            width: 80px;
+                                            position: absolute;
+                                            top: 15px;
+                                            right: 15px;
+                                            font-size: 15px;
+                                            color: #fff;
+                                            padding: 6px 8px;
+                                        }
+                                        .price{
+                                            color: #AB4949;
+                                            font-size: 14px;
+                                            width: 100%;
+                                            float: left;
+                                            font-weight: bold;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .product-review{
+                        width: 100%;
+                        float: left;
+                        padding-top: 17px;
+                        position: relative;
+                        .title{
+                            color: #AB4949;
+                            font-size: 20px;
+                            font-weight: 600;
+                            width: 100%;
+                            float: left;
+                            padding-bottom: 24px;
+                            margin-bottom: 0;
+                        }
+                        .list-review{
+                            .row{
+                                .col-lg-12{
+                                    padding-bottom: 32px;
+                                    .review{
+                                        .user-info{
+                                            width: 300px;
+                                            float: left;
+                                            padding-right: 40px;
+                                            .img{
+                                                width: 60px;
+                                                height: 60px;
+                                                margin-right: 17px;
+                                                float: left;
+                                                text-align: center;
+                                                img{
+                                                    width: 50px;
+                                                    height: 50px;
+                                                    border-radius: 50%;
+                                                }
+                                                span{
+                                                    color: #888484;
+                                                    font-size: 14px;
+                                                }
+                                            }
+                                            .user-info-right{
+                                                width: calc(100% - 77px);
+                                                float: left;
+                                                .expertise{
+                                                    display: none;
+                                                }
+                                                p{
+                                                    font-size: 16px;
+                                                    color: #413737;
+                                                    margin-bottom: 0;
+                                                }
+                                                .user-name{
+                                                    color: #413737;
+                                                    font-weight: bold;
+                                                }
+                                                .count-rating{
+                                                    color: #888484;
+                                                    font-size: 14px;
+                                                }
+                                                .date{
+                                                    color: #413737;
+                                                    font-size: 14px;
+                                                }
+                                            }
+                                        }
+                                        .user-info:hover, .user-info:focus{
+                                            .user-info-right{
+                                                .user-name{
+                                                    text-decoration: underline;
+                                                }
+                                            }
+                                        }
+                                        .review-content{
+                                            width: calc(100% - 350px);
+                                            float: left;
+                                            .rating{
+                                                i{
+                                                    color: #FFCF03;
+                                                    font-size: 18px;
+                                                    margin-right: 3px;
+                                                }
+                                                i:last-child{
+                                                    margin-right: 0;
+                                                }
+                                            }
+                                            .content{
+                                                font-size: 16px;
+                                                color: #413737;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .read-more{
+                            width: 100%;
+                            float: left;
+                            a{
+                                font-size: 16px;
+                                color: #AB4949;
+                                font-weight: 600;
+                            }
+                        }
+                    }
+                    .product-summary{
+                        width: 100%;
+                        float: left;
+                        padding-top: 6px;
+                        position: relative;
+                        .title{
+                            color: #AB4949;
+                            font-size: 20px;
+                            font-weight: 600;
+                            width: 100%;
+                            float: left;
+                            padding-bottom: 24px;
+                            margin-bottom: 0;
+                        }
+                        .list-summary{
+                            width: 100%;
+                            float: left;
+                            .row{
+                                .item-summary{
+                                    padding-bottom: 15px;
+                                    img{
+                                        float: left;
+                                        margin-right: 8px;
+                                        width: auto;
+                                        margin-top: 5px;
+                                    }
+                                    .info{
+                                        width: calc(100% - 38px);
+                                        float: left;
+                                        p{
+                                            font-size: 16px;
+                                            color: #413737;
+                                            margin-bottom: 0;
+                                        }
+                                        span{
+                                            font-size: 16px;
+                                            color: #413737;
+                                            font-weight: 600;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .report{
+                            width: 100%;
+                            float: left;
+                            font-size: 16px;
+                            color: #4A3F3F;
+                        }
+                    }
+                    .product-des-end{
+                        font-size: 16px;
+                        color: #4A3F3F;
+                        padding-top: 40px;
+                        width: 100%;
+                        b{
+                            a{
+                                color: #AB4949;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 991px) and (min-width: 768px){
+}
+@media only screen and (max-width: 768px) and (min-width: 574px){
+    .product-detail-page{
+        .container{
+            .row{
+                .col-lg-12{
+                    .row{
+                        .product-info{
+                            .img{
+                                height: 316px;
+                                width: 297px;
+                                margin-right: 16px;
+                                .show-img{
+                                    background-size: auto 300px;
+                                }
+                            }
+                            .info{
+                                width: calc(100% - 313px);
+                                min-height: 297px;
+                                .title{
+                                    padding-bottom: 8px;
+                                    margin-bottom: 0;
+                                }
+                                .region{
+                                    padding-bottom: 8px;
+                                }
+                                .country-wine-type{
+                                    padding-bottom: 8px;
+                                }
+                                .price{
+                                    padding-bottom: 8px;
+                                }
+                                .rating{
+                                    padding-bottom: 8px;
+                                }
+                            }
+                        }
+                        .product-shop{
+                            padding-top: 24px;
+                            .title{
+                                padding-bottom: 8px;
+                                margin-bottom: 0;
+                            }
+                            .list-shop{
+                                .row{
+                                    .shop-grid{
+                                        padding-bottom: 16px;
+                                        .shop{
+                                            .name{
+                                                width: calc(100% - 69px);
+                                            }
+                                            .address{
+                                                width: calc(100% - 69px);
+                                            }
+                                            .btn{
+                                                width: 75px;
+                                                top: 8px;
+                                                right: 8px;
+                                                padding: 5px 8px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .product-review{
+                            .title{
+                                padding-bottom: 8px;
+                                margin-bottom: 0;
+                            }
+                            .list-review{
+                                .row{
+                                    .col-lg-12{
+                                        padding-bottom: 24px;
+                                        .review{
+                                            .user-info{
+                                                width: 250px;
+                                                padding-right: 36px;
+                                                .user-info-right{
+                                                    .expertise{
+                                                        display: none;
+                                                    }
+                                                    width: calc(100% - 77px);
+                                                    p:nth-child(2){
+                                                        font-size: 16px;
+                                                    }
+                                                    p:nth-child(3){
+                                                        font-size: 16px;
+                                                    }
+                                                }
+                                            }
+                                            .review-content{
+                                                width: calc(100% - 296px);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .read-more{
+                                width: 100%;
+                                float: left;
+                                a{
+                                    font-size: 16px;
+                                    color: #AB4949;
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+                        .product-summary{
+                            .title{
+                                padding-bottom: 8px;
+                                margin-bottom: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 574px) and (min-width: 320px){
+    .product-detail-page{
+        padding: 20px 0;
+        .container{
+            .row{
+                .col-lg-12{
+                    .row{
+                        .product-info{
+                            .img{
+                                width: 100%;
+                                background-color: #F3EDED;
+                                background-size: 100%;
+                                margin-right: 0;
+                            }
+                            .info{
+                                width: 100%;
+                                padding-top: 0;
+                                min-height: auto;
+                                p{
+                                    margin-bottom: 0;
+                                }
+                                .title{
+                                    width: 100%;
+                                    float: left;
+                                    font-size: 20px;
+                                    padding-bottom: 4px;
+                                    margin-bottom: 0;
+                                }
+                                .region{
+                                    font-size: 16px;
+                                    padding-bottom: 8px;
+                                }
+                                .country-wine-type{
+                                    padding-bottom: 10px;
+                                    .country{
+                                        font-size: 16px;
+                                        margin-right: 16px;
+                                        img{
+                                            width: 20px;
+                                            height: 20px;
+                                        }
+                                    }
+                                    .wine-type{
+                                        font-size: 16px;
+                                        span::after{
+                                            content: "";
+                                            width: 20px;
+                                            height: 20px;
+                                        }
+                                    }
+                                }
+                                .price{
+                                    padding-top: 10px;
+                                    font-size: 24px;
+                                    color: #AB4949;
+                                    font-weight: 600;
+                                    padding-bottom: 8px;
+                                }
+                                .rating{
+                                    padding-bottom: 8px;
+                                    font-size: 20px;
+                                    color: #444444;
+                                    cursor: pointer;
+                                    i{
+                                        margin-right: 3px;
+                                    }
+                                    i:last-child{
+                                        margin-right: 0;
+                                    }
+                                    em{
+                                        font-size: 16px;
+                                        color: #888484;
+                                    }
+                                }
+                                .food{
+                                    font-size: 18px;
+                                    color: #544848;
+                                    span{
+                                        margin-right: 24px;
+                                    }
+                                    span:last-child{
+                                        margin-right: 0;
+                                    }
+                                }
+                            }
+                        }
+                        .product-shop{
+                            padding-top: 24px;
+                            .content-top{
+                                .title{
+                                    padding-bottom: 8px;
+                                }
+                            }
+                            .list-shop{
+                                .row{
+                                    .shop-grid{
+                                        grid-template-columns: repeat(1, 100%);
+                                        .shop{
+                                            .address{
+                                                text-overflow: inherit;
+                                                white-space: normal;
+                                                overflow: hidden;
+                                                width: 100%;
+                                            }
+                                            .btn{
+                                                padding: 5px 8px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .product-review{
+                            width: 100%;
+                            float: left;
+                            position: relative;
+                            .title{
+                                color: #AB4949;
+                                font-size: 20px;
+                                font-weight: 600;
+                                width: 100%;
+                                float: left;
+                                padding-bottom: 8px;
+                                margin-bottom: 0;
+                            }
+                            .list-review{
+                                .row{
+                                    .col-lg-12{
+                                        padding-bottom: 24px;
+                                        .review{
+                                            .user-info{
+                                                width: 100%;
+                                                float: left;
+                                                padding-right: 0;
+                                                padding-bottom: 8px;
+                                                .img{
+                                                    width: 50px;
+                                                    height: 50px;
+                                                    margin-right: 17px;
+                                                    float: left;
+                                                    img{
+                                                        width: 100%;
+                                                        border-radius: 50%;
+                                                        margin-top: 9px;
+                                                    }
+                                                    .expertise{
+                                                        display: none;
+                                                    }
+                                                }
+                                                .user-info-right{
+                                                    width: calc(100% - 67px);
+                                                    float: left;
+                                                    .expertise{
+                                                        display: block;
+                                                        color: #888484;
+                                                        font-size: 14px;
+                                                    }
+                                                    p{
+                                                        font-size: 16px;
+                                                        color: #413737;
+                                                        margin-bottom: 0;
+                                                    }
+                                                    .user-name{
+                                                        color: #413737;
+                                                        font-weight: bold;
+                                                    }
+                                                    .count-rating{
+                                                        color: #888484;
+                                                        font-size: 14px;
+                                                    }
+                                                    .date{
+                                                        color: #413737;
+                                                        font-size: 14px;
+                                                    }
+                                                    .rating{
+                                                        div{
+                                                            float: left;
+                                                            margin-right: 10px;
+                                                            i{
+                                                                color: #FFCF03;
+                                                                font-size: 18px;
+                                                                margin-right: 3px;
+                                                            }
+                                                            i:last-child{
+                                                                margin-right: 0;
+                                                            }
+                                                        }
+                                                        color: #413737;
+                                                    }
+                                                }
+                                            }
+                                            .review-content{
+                                                width: 100%;
+                                                float: left;
+                                                .rating{
+                                                    i{
+                                                        color: #FFCF03;
+                                                        font-size: 18px;
+                                                        margin-right: 3px;
+                                                    }
+                                                    i:last-child{
+                                                        margin-right: 0;
+                                                    }
+                                                }
+                                                .content{
+                                                    font-size: 16px;
+                                                    color: #413737;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .read-more{
+                                width: 100%;
+                                float: left;
+                                a{
+                                    font-size: 16px;
+                                    color: #AB4949;
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+                        .product-summary{
+                            width: 100%;
+                            float: left;
+                            position: relative;
+                            .title{
+                                color: #AB4949;
+                                font-size: 20px;
+                                font-weight: 600;
+                                width: 100%;
+                                float: left;
+                                padding-bottom: 8px;
+                                margin-bottom: 0;
+                            }
+                            .list-summary{
+                                width: 100%;
+                                float: left;
+                                .row{
+                                    .item-summary{
+                                        padding-bottom: 15px;
+                                        img{
+                                            float: left;
+                                            margin-right: 8px;
+                                            margin-top: 5px;
+                                        }
+                                        .info{
+                                            width: calc(100% - 38px);
+                                            float: left;
+                                            p{
+                                                font-size: 16px;
+                                                color: #413737;
+                                                margin-bottom: 0;
+                                            }
+                                            span{
+                                                font-size: 16px;
+                                                color: #413737;
+                                                font-weight: 600;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .report{
+                                width: 100%;
+                                float: left;
+                                font-size: 16px;
+                                color: #4A3F3F;
+                            }
+                        }
+                        .product-des-end{
+                            font-size: 16px;
+                            color: #4A3F3F;
+                            padding-top: 40px;
+                            width: 100%;
+                            b{
+                                a{
+                                    color: #AB4949;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /deep/ .container{
+		max-width: 100%;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}

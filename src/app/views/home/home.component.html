@@ -1,0 +1,793 @@
+<div class="contain-main-home clearfix">
+    <div class="home-search">
+        <div class="container">
+            <div class="input-search d-block d-lg-none d-md-none d-sm-none">
+                <form action="">
+                    <input type="search" name="displayed_name_search" id="displayed_name_search" class="form-control" [placeholder]="getTranslate('search')">
+                    <span id="icon-search" class="rw-color" (click)="changeDisplayedName()">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </form>
+            </div>
+            <div class="welcome-des" [ngStyle]="showBgColorWelcomeDes()">
+                {{getTranslate('find_the_wine_you_love')}}
+            </div>
+            <div class="list-tags">
+                <div class="meal">
+                    <div class="des d-none d-md-block d-lg-block">{{getTranslate('pick_your_wine_by_dishes')}}</div>
+                    <ng-template ngFor let-item [ngForOf]="listTags" let-i="index" [ngForTrackBy]="trackByFn">
+                        <div class="tag-item" [id]="'tag-' + item.id" *ngIf="item.type === 'MEAL'">
+                            <span class="btn" [ngClass]="{
+                                'meal': item.type === 'MEAL',
+                                'occasion': item.type === 'OCCASION',
+                                'active': tag && tag.id === item.id
+                            }" (click)="changeTag(item)">{{translate.getDefaultLang() === 'en' ? item.name : item.name_vn}}</span>
+                        </div>
+                    </ng-template>
+                    <select name="meal" id="meal" class="form-control" (change)="changeSelectTag($event)">
+                        <option value=null>{{getTranslate('by_dishes')}}</option>
+                        <ng-template ngFor let-item [ngForOf]="listTags" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [value]="item.foods" *ngIf="item.type === 'MEAL'">{{translate.getDefaultLang() === 'en' ? item.name : item.name_vn}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+                <div class="occasion">
+                    <div class="des d-none d-md-block d-lg-block">{{getTranslate('pick_your_wine_by_event')}}</div>
+                    <ng-template ngFor let-item [ngForOf]="listTags" let-i="index" [ngForTrackBy]="trackByFn">
+                        <div class="tag-item" [id]="'tag-' + item.id" *ngIf="item.type === 'OCCASION'">
+                            <span class="btn" [ngClass]="{
+                                'meal': item.type === 'MEAL',
+                                'occasion': item.type === 'OCCASION',
+                                'active': tag && tag.id === item.id
+                            }" (click)="changeTag(item)">{{translate.getDefaultLang() === 'en' ? item.name : item.name_vn}}</span>
+                        </div>
+                    </ng-template>
+                    <select name="occasion" id="occasion" class="form-control" (change)="changeSelectTag($event)">
+                        <option value=null>{{getTranslate('by_events')}}</option>
+                        <ng-template ngFor let-item [ngForOf]="listTags" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [value]="item.foods" *ngIf="item.type === 'OCCASION'">{{translate.getDefaultLang() === 'en' ? item.name : item.name_vn}}</option>
+                        </ng-template>
+                    </select>
+                </div>
+            </div>
+            <div class="form-search row" id="form-search">   
+                <div class="type-wine col-lg-2 col-md-4 col-12">
+                    <div>
+                        <p class="pull-left d-block d-lg-none">{{getTranslate('type_of_wine')}}</p>
+                        <p class="pull-right d-block d-lg-none d-md-none" (click)="resetFilter()">{{getTranslate('reset_filters')}}</p>
+                    </div>
+                    <span class="btn btn-wine-type btn-red-type" [ngClass]="{'btn-default' : !checkWineTypeIssetArray('Red Wine'), 'btn-rw' : checkWineTypeIssetArray('Red Wine')}"
+                    (click)="changeWineType('Red Wine')">{{getTranslate('red')}}</span>
+                    <span class="btn btn-wine-type btn-white-type" [ngClass]="{'btn-default' : !checkWineTypeIssetArray('White Wine'), 'btn-rw' : checkWineTypeIssetArray('White Wine')}"
+                    (click)="changeWineType('White Wine')">{{getTranslate('white')}}</span>
+                    <span class="btn btn-wine-type btn-rose-type" [ngClass]="{'btn-default' : !checkWineTypeIssetArray('Rosé Wine'), 'btn-rw' : checkWineTypeIssetArray('Rosé Wine')}"
+                    (click)="changeWineType('Rosé Wine')">{{getTranslate('rose')}}</span>
+                    <span class="btn btn-wine-type btn-sparkling-type" [ngClass]="{'btn-default' : !checkWineTypeIssetArray('Sparkling'), 'btn-rw' : checkWineTypeIssetArray('Sparkling')}"
+                    (click)="changeWineType('Sparkling')">{{getTranslate('sparkling')}}</span>
+                </div>
+                <div class="country col-lg-2 col-md-4 col-6">
+                    <p>{{getTranslate('country')}}</p>
+                    <select name="country_id" id="country_id" [(ngModel)]="country_id" class="form-control"
+                    (change)="changeCountry(country_id)" [disabled]="listCountries.length === 0" >
+                        <option [ngValue]="null">{{getTranslate('all_countries')}}</option>
+                        <ng-template ngFor let-city [ngForOf]="listCountries" let-i="index" [ngForTrackBy]="trackByFn">
+                            <option [value]="city.id">
+                                {{translate.getDefaultLang() === 'en' ? city.name : (city.name_vn === null ? city.name : city.name_vn)}} ({{city.amout_products}})
+                            </option>
+                        </ng-template>
+                    </select>
+                </div>
+                <div class="country col-lg-2 col-md-4 col-6">
+                    <p>{{getTranslate('food_pairings')}}</p>
+                    <select name="food_id" id="food_id" class="form-control" [(ngModel)]="food_id" (change)="changeFood(food_id)" [disabled]="listFoods.length === 0">
+                        <option *ngFor="let food of listFoods" [value]="food.id">{{translate.getDefaultLang() === 'en' ? food.name : food.name_vn}}</option>
+                    </select>
+                    <!-- <angular2-multiselect [data]="listFoods" [(ngModel)]="foods_selected" [settings]="settings"
+                        (onSelect)="onSelectFood($event)" (onDeSelect)="onDeSelectFood($event)" name="foods_selected">
+                    </angular2-multiselect> -->
+                </div>
+                <div class="price-range col-lg-4 col-md-8 col-12">
+                    <p>{{getTranslate('price_range')}}</p>
+                    <div class="price-slider">
+                        <ng5-slider [(value)]="minPrice" [(highValue)]="maxPrice" [options]="options" #rangePrice (userChangeEnd)="changeRangePrice($event)"></ng5-slider>
+                    </div>
+                </div>
+                <div class="action text-center col-lg-2 col-md-4 col-12 d-none d-md-block d-lg-block" (click)="resetFilter()">
+                    {{getTranslate('reset_filters')}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-content">
+        <div class="container">
+            <div class="list-result row" *ngIf="listProducts && listProducts.length > 0">
+                <div class="count-result">
+                    <div class="float-left d-none d-lg-block d-md-block">
+                        <span>{{getTranslate('there_are')}} {{count}} {{getTranslate('wine_between')}} {{price_from | number}} - {{price_to | number}}k{{price_to === 1500 ? '+' : ''}} VND {{country_id !== null && country_selected.length > 0 ? getTranslate('from') : ''}} {{country_id !== null && country_selected.length > 0 ? country_selected[0].name : ''}} {{getTranslate('in')}} {{getTranslate('ho_chi_minh')}}</span>
+                    </div>
+                    <div class="float-left d-block d-lg-none d-md-none">
+                        <span>{{count}} {{getTranslate('items_found')}}</span>
+                    </div>
+                    <div class="float-right">
+                        <span>{{getTranslate('sort_by')}}:</span>
+                        <div class="dropdown col-auto float-right" dropdown>
+                            <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle"
+                                aria-controls="dropdown-sort-home">
+                                {{returnStringOrderBy()}} <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-sort-home" *dropdownMenu
+                                aria-labelledby="dropdownMenuButton">
+                                <div class="dropdown-item" (click)="changeOrderBy('ratings_2')">
+                                    {{getTranslate('ratings_2')}}
+                                </div>
+                                <div class="dropdown-item" (click)="changeOrderBy('popularity')">
+                                    {{getTranslate('popularity')}}
+                                </div>
+                                <div class="dropdown-item" (click)="changeOrderBy('price_low_high')">
+                                    {{getTranslate('price_low_high')}}
+                                </div>
+                                <div class="dropdown-item" (click)="changeOrderBy('price_high_low')">
+                                    {{getTranslate('price_high_low')}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <ng-template ngFor let-item [ngForOf]="listProducts" let-i="index" let-isLast="last" [ngForTrackBy]="trackByFn">
+                    <div class="item-result col-lg-4 col-md-6 col-12" [id]="'wine-search-' + item.id" >
+                        <div class="item-img" (click)="getWidthOfBrowser() > 992 ? showMoreInfo(i, item.id, isLast) : openMoreInfoModal(modalMoreInfo,item.id)" [style.backgroundImage]="showBgColor(item.displayed_vivino_wine_type)">
+                            <div class="img" [style.backgroundImage]="'url(' + item.displayed_picture + ')'" >
+                            </div>
+                            <img [src]="item.displayed_picture" [alt]="showDisplayedNameProduct(item)" [title]="showDisplayedNameProduct(item)" class="d-none">
+                            <div class="item-country" *ngIf="item.nation !== null">
+                                <img [src]="'https://images.vivino.com/web/flags/' + item.nation.code + '.svg'" alt=""> 
+                                <span>{{translate.getDefaultLang() === 'en' ? item.nation.name : (item.nation.name_vn === null ? item.nation.name : item.nation.name_vn)}}</span>
+                            </div>
+                            <div class="item-type-wine" *ngIf="item.displayed_vivino_wine_type !== null">
+                                {{showNameWineType(item)}}
+                                <span [ngClass]="{
+                                    'red': item.displayed_vivino_wine_type === 'Red Wine',
+                                    'white': item.displayed_vivino_wine_type === 'White Wine',
+                                    'rose': item.displayed_vivino_wine_type === 'Rosé Wine',
+                                    'sparkling': item.displayed_vivino_wine_type === 'Sparkling'
+                                }"></span>
+                            </div>
+                        </div>
+                        <div class="item-info">
+                            <p class="item-name">
+                                <a (click)="getWidthOfBrowser() > 992 ? showMoreInfo(i, item.id, isLast) : openMoreInfoModal(modalMoreInfo,item.id)">
+                                    {{showDisplayedNameProduct(item)}}
+                                </a>
+                            </p>
+                            <p class="item-price">
+                                <b>{{item.price | number}} VND</b>
+                                <span *ngIf="item.vivino_winery"> {{getTranslate('by')}} {{item.vivino_winery.name}}</span>
+                            </p>
+                            <p class="item-ratings">
+                                {{item.rating}} 
+                                <i class="fa rw-color" aria-hidden="true"
+                                [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i> 
+                                <span> {{item.reviews}} {{getTranslate('ratings')}}</span>
+                            </p>
+                            <div class="item-action">
+                                <div class="d-none d-lg-block float-left">
+                                    <span class="btn btn-buy" (click)="showMoreInfo(i, item.id, isLast)" [ngClass]="{
+                                        'btn-buy-active': i_more_info === i && !more_info_close
+                                    }">
+                                        <i class="fa fa-spinner fa-spin" *ngIf="loading_more_info && i_more_info === i; else elseBtnShowMore"></i> 
+                                        <ng-template #elseBtnShowMore>{{getTranslate('view_buy')}}</ng-template>
+                                    </span>
+                                </div>
+                                <div class="d-block d-lg-none float-left">
+                                    <span class="btn btn-buy" (click)="openMoreInfoModal(modalMoreInfo,item.id)">{{getTranslate('view_buy')}}</span>
+                                </div>
+                                <a class="btn btn-more-info" [routerLink]="item.slug" target="_blank">{{getTranslate('open_details')}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div [id]="'more-info-' + item.id" class="more-info-content" [ngClass]="{
+                        'more-info-content-show': more_info_close === false && row_more_info === fnFloor(i)
+                    }" *ngIf="(i + 1) % 3 === 0 || isLast">
+                        <span class="arrow_box" [ngClass]="{
+                            'arrow_box_1': showClassArrowBox(i) === 1,
+                            'arrow_box_2': showClassArrowBox(i) === 2,
+                            'arrow_box_3': showClassArrowBox(i) === 0
+                        }" *ngIf="row_more_info === fnFloor(i)"></span>
+                        <div class="col-lg-12" *ngIf="checkShowMoreInfo(i)">
+                            <div class="more-info" *ngIf="more_info_wine">
+                                <div class="shop" *ngIf="more_info_wine.shops_of_product.length > 0">
+                                    <div class="content-top">
+                                        <p>
+                                            <b>{{getTranslate('available_in')}} {{more_info_wine.shops_of_product.length}} {{getTranslate('shops')}}</b>
+                                        </p>
+                                        <p class="how-to-buy float-left" [tooltip]="getTranslate('how_to_buy_is_coming_later')">
+                                            &nbsp;{{getTranslate('how_to_buy')}}
+                                        </p>
+                                        <p class="report-telegram float-right">
+                                            {{getTranslate('the_shop_does_not_sell_it')}} <b style="text-decoration: underline;"><a href="https://t.me/ritewine" target="_blank">Telegram</a></b> {{getTranslate('and_win_a_botte_every_month')}}
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="shop-grid">
+                                            <ng-template ngFor let-product_shop [ngForOf]="more_info_wine.shops_of_product" let-i="index" [ngForTrackBy]="trackByFn">
+                                                <div class="item-shop" *ngIf="!product_shop.not_in_use">
+                                                    <p>{{product_shop.shop.displayed_name}}</p>
+                                                    <span class="name-in-the-shop">{{product_shop.name_in_the_shop}}</span>
+                                                    <span class="price">{{product_shop.price | number}} VND</span>
+                                                    <span class="address">{{product_shop.shop.displayed_address}}</span>
+                                                    <a [href]="product_shop.shop.displayed_link" target="_blank" class="btn">
+                                                        {{getTranslate('buy')}} {{getTranslate('from')}}<br>
+                                                        Now.vn
+                                                    </a>
+                                                </div>
+                                            </ng-template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="reviews" *ngIf="more_info_wine.comments.length > 0">
+                                    <p><b>{{getTranslate('community_reviews')}}</b></p>
+                                    <div class="row">
+                                        <ng-template ngFor let-review [ngForOf]="more_info_wine.comments" let-i="index" [ngForTrackBy]="trackByFn">
+                                            <div class="col-12" *ngIf="i < 3">
+                                                <div class="item-review">
+                                                    <div class="user-info">
+                                                        <a [href]="'https://www.vivino.com/users/' + review.user.seo_name" target="_blank">
+                                                            <div class="img">
+                                                                <img [src]="review.user.image.location" [alt]="review.user.alias" [title]="review.user.alias">
+                                                                <span class="expertise">{{showUserExpertise(review.user.statistics.ratings_count)}}</span>
+                                                            </div>
+                                                            <div class="user-info-right">
+                                                                <p class="user-name">
+                                                                    {{review.user.alias}}
+                                                                </p>
+                                                                <p class="count-rating">
+                                                                    {{review.user.statistics.ratings_count}} {{getTranslate('ratings')}}
+                                                                </p>
+                                                                <p class="date">
+                                                                    {{getTranslate('rated_on')}} {{review.created_at | date :'yyyy/MM/dd' : 'UTC'}}
+                                                                </p>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="review-content">
+                                                        <div class="rating">
+                                                            <i class="fa" aria-hidden="true"
+                                                            [ngClass]="{'fa-star' : review.rating >= 1, 'fa-star-o' : review.rating < 0.5, 'fa-star-half-o' : review.rating >= 0.5 && review.rating < 1}"></i>
+                                                            <i class="fa" aria-hidden="true"
+                                                                [ngClass]="{'fa-star' : review.rating >= 2, 'fa-star-o' : review.rating < 1.5, 'fa-star-half-o' : review.rating >= 1.5 && review.rating < 2}"></i>
+                                                            <i class="fa" aria-hidden="true"
+                                                                [ngClass]="{'fa-star' : review.rating >= 3, 'fa-star-o' : review.rating < 2.5, 'fa-star-half-o' : review.rating >= 2.5 && review.rating < 3}"></i>
+                                                            <i class="fa" aria-hidden="true"
+                                                                [ngClass]="{'fa-star' : review.rating >= 4, 'fa-star-o' : review.rating < 3.5, 'fa-star-half-o' : review.rating >= 3.5 && review.rating < 4}"></i>
+                                                            <i class="fa" aria-hidden="true"
+                                                                [ngClass]="{'fa-star' : review.rating === 5, 'fa-star-o' : review.rating < 4.5, 'fa-star-half-o' : review.rating >= 4.5 && review.rating < 5}"></i>
+                                                        </div>
+                                                        <div class="content">
+                                                            {{translate.getDefaultLang() === 'en' ? review.content : (review.content_vn !== null ? review.content_vn : review.content)}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                        <div class="read-more text-center">
+                                            <a [routerLink]="more_info_wine.slug" target="_blank">
+                                                {{getTranslate('product_detail_read_more')}} <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="summary">
+                                    <p><b>{{getTranslate('summary')}}</b></p>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine.displayed_vivino_food !== null && more_info_wine.displayed_vivino_food !== '' || more_info_wine.foods_of_product.length > 0">
+                                            <img src="/assets/img/icon/foodpair.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('food_pairings')}}</p>
+                                                <span>{{translate.getDefaultLang() === 'en' ? showFoods(more_info_wine) : showFoods2(more_info_wine)}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine.displayed_vivino_grape !== null && more_info_wine.displayed_vivino_grape !== '' || more_info_wine.vivino_grapes.length > 0">
+                                            <img src="/assets/img/icon/Grapes.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('grapes')}}</p>
+                                                <span>{{showGrapes(more_info_wine)}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine.vivino_region !== null">
+                                            <img src="/assets/img/icon/region.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('region')}}</p>
+                                                <span>{{more_info_wine.vivino_region.name}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine">
+                                            <img src="/assets/img/icon/alcohol.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('alcohol')}}</p>
+                                                <span>{{more_info_wine.alcohol && more_info_wine.alcohol > 0 ? (more_info_wine.alcohol + '%') : 'Wine typical'}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine.vivino_winery">
+                                            <img src="/assets/img/icon/Winery.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('winery')}}</p>
+                                                <span>{{more_info_wine.vivino_winery.name}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-6 col-12 item-summary" *ngIf="more_info_wine.vivino_style !== null">
+                                            <img src="/assets/img/icon/sty.svg" alt="">
+                                            <div class="info">
+                                                <p>{{getTranslate('regional_styles')}}</p>
+                                                <span>{{more_info_wine.vivino_style.name}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="show-less">
+                                    <span (click)="closeMoreInfo(item.id)">
+                                        <i class="fa fa-times" aria-hidden="true"></i> {{getTranslate('close')}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="clearfix"></div>
+                <div class="view-more-wine" *ngIf="listProducts.length < count" >
+                    <a href="javascript:void(0)" (click)="getMoreProduct()" class="btn btn-view-more-wine" [style.backgroundImage]="showBgColorViewMoreWine()">
+                        <i class="fa " aria-hidden="true" [ngClass]="{
+                            'fa-arrow-down': !loading_get_more_product,
+                            'fa-spinner fa-spin': loading_get_more_product
+                        }"></i> {{getTranslate('view_more')}}
+                    </a>
+                </div>
+            </div>
+            <!-- <div class="list-result row" *ngIf="search_loading && listProducts && listProducts.length === 0">
+                <div class="loading">
+                    {{getTranslate('best_wines_are_on_the_way')}}
+                </div>
+            </div> -->
+            <div class="list-result row" *ngIf="listProducts && listProducts.length === 0">
+                <div class="loading">
+                    {{getTranslate('sorry_we_couldn_not_find_any_wines')}} 
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="home-featured" [style.backgroundColor]="showBgFeatured()" >
+        <div class="container">
+            <div class="row">
+                <div class="featured">
+                    <span class="btn" [ngClass]="{
+                        'btn-featured-active' : featured === 'DAILY_DRINKS',
+                        'btn-featured' : featured === 'EXTRAORDINARIES'
+                    }" (click)="changeFeatured('DAILY_DRINKS')">
+                        {{getTranslate('daily_rinks')}}
+                    </span>
+                    <span class="btn" [ngClass]="{
+                        'btn-featured' : featured === 'DAILY_DRINKS',
+                        'btn-featured-active' : featured === 'EXTRAORDINARIES'
+                    }" (click)="changeFeatured('EXTRAORDINARIES')">
+                        {{getTranslate('extraordinaries')}}
+                    </span>
+                </div>
+                <div class="results">
+                    <div class="loading" *ngIf="featured_loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span> 
+                    </div>
+                    <swiper [config]="configSwiperSliderPC" *ngIf="!featured_loading" class="swiper-pc animated fadeInUp" id="swiper-home">
+                        <ng-template ngFor let-item [ngForOf]="listProductsWithFeatured" let-i="index" [ngForTrackBy]="trackByFn">
+                            <div class="swiper-slide">
+                                <a [routerLink]="item.slug" target="_blank">
+                                    <div class="content-1" [style.backgroundImage]="showBgColor(item.displayed_vivino_wine_type)">
+                                        <div class="left">
+                                            <div class="name-wine">
+                                                {{showDisplayedNameProduct(item)}}
+                                            </div>
+                                            <div class="country-wine-type">
+                                                <div class="country" *ngIf="item.nation !== null">
+                                                    <img [src]="'https://images.vivino.com/web/flags/' + item.nation.code + '.svg'" alt=""> 
+                                                    <span>{{translate.getDefaultLang() === 'en' ? item.nation.name : (item.nation.name_vn === null ? item.nation.name : item.nation.name_vn)}}</span>
+                                                </div>
+                                                <div class="wine-type" *ngIf="item.displayed_vivino_wine_type !== null">
+                                                    <span [ngClass]="{
+                                                        'red': item.displayed_vivino_wine_type === 'Red Wine',
+                                                        'white': item.displayed_vivino_wine_type === 'White Wine',
+                                                        'rose': item.displayed_vivino_wine_type === 'Rosé Wine',
+                                                        'sparkling': item.displayed_vivino_wine_type === 'Sparkling'
+                                                    }"></span> {{showNameWineType(item)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <img [src]="item.displayed_picture" [alt]="showDisplayedNameProduct(item)" class="img-wine">
+                                    </div>
+                                    <div class="content-2">
+                                        <div class="rating-wine">
+                                            {{item.rating}} 
+                                            <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                            <i class="fa rw-color" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                            <i class="fa rw-color" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                            <i class="fa rw-color" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                            <i class="fa rw-color" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i>
+                                            <span> {{item.reviews}} {{getTranslate('ratings')}}</span>
+                                        </div>
+                                        <div class="price-wine">
+                                            {{item.price | number}} VND <span *ngIf="item.vivino_winery">{{getTranslate('by')}} {{item.vivino_winery.name}}</span>
+                                        </div>
+                                        <div class="action-wine">
+                                            <a class="btn btn-rw" [routerLink]="item.slug" target="_blank">
+                                                {{getTranslate('view_buy')}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </ng-template>
+                    </swiper>
+                    <div class="swiper-button-prev-unique" [ngClass]="{
+                        'd-none': featured_loading
+                    }"></div>
+                    <div class="swiper-button-next-unique" [ngClass]="{
+                        'd-none': featured_loading
+                    }"></div>
+                    <swiper [config]="configSwiperSliderTablet" *ngIf="!featured_loading" class="swiper-tablet animated fadeInUp" id="swiper-home">
+                        <ng-template ngFor let-item [ngForOf]="listProductsWithFeatured" let-i="index" [ngForTrackBy]="trackByFn">
+                            <div class="swiper-slide swiper-slide-responsive">
+                                <div class="content-1" [style.backgroundImage]="showBgColor(item.displayed_vivino_wine_type)">
+                                    <a [routerLink]="item.slug" target="_blank" [style.backgroundImage]="'url(' + item.displayed_picture + ')'">
+                                        <img [src]="item.displayed_picture" [alt]="showDisplayedNameProduct(item)" [title]="showDisplayedNameProduct(item)" class="d-none">
+                                        <div class="item-country" *ngIf="item.nation !== null">
+                                            <img [src]="'https://images.vivino.com/web/flags/' + item.nation.code + '.svg'" alt=""> 
+                                            <span>{{translate.getDefaultLang() === 'en' ? item.nation.name : (item.nation.name_vn === null ? item.nation.name : item.nation.name_vn)}}</span>
+                                        </div>
+                                        <div class="item-type-wine" *ngIf="item.vivino_wine_type !== null">
+                                            {{showNameWineType(item)}}
+                                            <span [ngClass]="{
+                                                'red': item.displayed_vivino_wine_type === 'Red Wine',
+                                                'white': item.displayed_vivino_wine_type === 'White Wine',
+                                                'rose': item.displayed_vivino_wine_type === 'Rosé Wine',
+                                                'sparkling': item.displayed_vivino_wine_type === 'Sparkling'
+                                            }"></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="content-2">
+                                    <p class="item-name">
+                                        <a [routerLink]="item.slug" target="_blank">
+                                            {{showDisplayedNameProduct(item)}}
+                                        </a>
+                                    </p>
+                                    <p class="item-price">
+                                        <b>{{item.price | number}} VND</b>
+                                        <span *ngIf="item.vivino_winery"> {{getTranslate('by')}} {{item.vivino_winery.name}}</span>
+                                    </p>
+                                    <p class="item-ratings">
+                                        {{item.rating}} 
+                                        <i class="fa rw-color" aria-hidden="true"
+                                        [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i> 
+                                        <span> {{item.reviews}} {{getTranslate('ratings')}}</span>
+                                    </p>
+                                    <div class="item-action">
+                                        <span class="btn btn-buy" (click)="openMoreInfoModal(modalMoreInfo,item.id)">{{getTranslate('view_buy')}}</span>
+                                        <a class="btn btn-more-info" [routerLink]="item.slug" target="_blank">{{getTranslate('open_details')}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </swiper>
+                    <swiper [config]="configSwiperSliderMobile" *ngIf="!featured_loading" class="swiper-mobile animated fadeInUp" id="swiper-home">
+                        <ng-template ngFor let-item [ngForOf]="listProductsWithFeatured" let-i="index" [ngForTrackBy]="trackByFn">
+                            <div class="swiper-slide swiper-slide-responsive">
+                                <div class="content-1" [style.backgroundImage]="showBgColor(item.displayed_vivino_wine_type)">
+                                    <a [routerLink]="item.slug" target="_blank" [style.backgroundImage]="'url(' + item.displayed_picture + ')'">
+                                        <img [src]="item.displayed_picture" [alt]="showDisplayedNameProduct(item)" [title]="showDisplayedNameProduct(item)" class="d-none">
+                                        <div class="item-country" *ngIf="item.nation !== null">
+                                            <img [src]="'https://images.vivino.com/web/flags/' + item.nation.code + '.svg'" alt=""> 
+                                            <span>{{translate.getDefaultLang() === 'en' ? item.nation.name : (item.nation.name_vn === null ? item.nation.name : item.nation.name_vn)}}</span>
+                                        </div>
+                                        <div class="item-type-wine" *ngIf="item.vivino_wine_type !== null">
+                                            {{showNameWineType(item)}}
+                                            <span [ngClass]="{
+                                                'red': item.displayed_vivino_wine_type === 'Red Wine',
+                                                'white': item.displayed_vivino_wine_type === 'White Wine',
+                                                'rose': item.displayed_vivino_wine_type === 'Rosé Wine',
+                                                'sparkling': item.displayed_vivino_wine_type === 'Sparkling'
+                                            }"></span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="content-2">
+                                    <p class="item-name">
+                                        <a [routerLink]="item.slug" target="_blank">
+                                            {{showDisplayedNameProduct(item)}}
+                                        </a>
+                                    </p>
+                                    <p class="item-price">
+                                        <b>{{item.price | number}} VND</b>
+                                        <span *ngIf="item.vivino_winery"> {{getTranslate('by')}} {{item.vivino_winery.name}}</span>
+                                    </p>
+                                    <p class="item-ratings">
+                                        {{item.rating}} 
+                                        <i class="fa rw-color" aria-hidden="true"
+                                        [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                        <i class="fa rw-color" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i> 
+                                        <span> {{item.reviews}} {{getTranslate('ratings')}}</span>
+                                    </p>
+                                    <div class="item-action">
+                                        <span class="btn btn-buy" (click)="openMoreInfoModal(modalMoreInfo,item.id)">{{getTranslate('view_buy')}}</span>
+                                        <a class="btn btn-more-info" [routerLink]="item.slug" target="_blank">{{getTranslate('open_details')}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </swiper>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<ng-template #modalMoreInfo>
+    <div class="modal-body">
+        <a class="close" aria-label="Close" (click)="modalMoreInfoRef.hide()">
+            <span class="glyphicon glyphicon-remove"></span>
+        </a>
+        <div class="more-info-wine">
+            <div class="product-info">
+                <div class="img" [style.backgroundImage]="showBgColor(more_info_wine.displayed_vivino_wine_type)">
+                    <div class="loading" *ngIf="picture_loading">
+                        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                        <span class="sr-only">Loading...</span> 
+                    </div>
+                    <div id="img" [style.backgroundImage]="'url(' + more_info_wine.displayed_picture + ')'"></div>
+                    <img [src]="more_info_wine.displayed_picture" [alt]="showDisplayedNameProduct(more_info_wine)" class="d-none">
+                </div>
+                <div class="info">
+                    <h1 class="title">
+                        {{showDisplayedNameProduct(more_info_wine)}}
+                    </h1>
+                    <p class="region d-none d-md-block" *ngIf="more_info_wine.vivino_winery">{{getTranslate('by')}} {{more_info_wine.vivino_winery.name}}</p>
+                    <p class="country-wine-type d-none d-md-block">
+                        <span class="country" *ngIf="more_info_wine.nation !== null">
+                            <img [src]="'https://images.vivino.com/web/flags/' + more_info_wine.nation.code + '.svg'" alt=""> {{more_info_wine.nation.name}}
+                        </span>
+                        <span class="wine-type">
+                            <span [ngClass]="{
+                                'red': more_info_wine.displayed_vivino_wine_type === 'Red Wine',
+                                'white': more_info_wine.displayed_vivino_wine_type === 'White Wine',
+                                'rose': more_info_wine.displayed_vivino_wine_type === 'Rosé Wine',
+                                'sparkling': more_info_wine.displayed_vivino_wine_type === 'Sparkling'
+                            }"></span> {{showNameWineType(more_info_wine)}}
+                        </span>
+                    </p>
+                    <p class="price">
+                        {{more_info_wine.price | number}} VND
+                    </p>
+                    <p class="rating" *ngIf="more_info_wine.rating">
+                        {{more_info_wine.rating}} 
+                        <i class="fa rw-color" aria-hidden="true"
+                        [ngClass]="{'fa-star' : more_info_wine.rating >= 1, 'fa-star-o' : more_info_wine.rating < 0.5, 'fa-star-half-o' : more_info_wine.rating >= 0.5 && more_info_wine.rating < 1}"></i>
+                        <i class="fa rw-color" aria-hidden="true"
+                            [ngClass]="{'fa-star' : more_info_wine.rating >= 2, 'fa-star-o' : more_info_wine.rating < 1.5, 'fa-star-half-o' : more_info_wine.rating >= 1.5 && more_info_wine.rating < 2}"></i>
+                        <i class="fa rw-color" aria-hidden="true"
+                            [ngClass]="{'fa-star' : more_info_wine.rating >= 3, 'fa-star-o' : more_info_wine.rating < 2.5, 'fa-star-half-o' : more_info_wine.rating >= 2.5 && more_info_wine.rating < 3}"></i>
+                        <i class="fa rw-color" aria-hidden="true"
+                            [ngClass]="{'fa-star' : more_info_wine.rating >= 4, 'fa-star-o' : more_info_wine.rating < 3.5, 'fa-star-half-o' : more_info_wine.rating >= 3.5 && more_info_wine.rating < 4}"></i>
+                        <i class="fa rw-color" aria-hidden="true"
+                            [ngClass]="{'fa-star' : more_info_wine.rating === 5, 'fa-star-o' : more_info_wine.rating < 4.5, 'fa-star-half-o' : more_info_wine.rating >= 4.5 && more_info_wine.rating < 5}"></i>
+                        <em> {{more_info_wine.reviews}} {{getTranslate('ratings')}}</em>
+                    </p>
+                    <p class="food d-none d-md-block">
+                        <ng-template ngFor let-item [ngForOf]="more_info_wine.foods_of_product" let-i="index" [ngForTrackBy]="trackByFn">
+                            <span>
+                                <img [src]="item.food.icon" [alt]="item.food.name"> {{translate.getDefaultLang() === 'vi' ? (item.food.name_vn !== null || item.food.name_vn !== '' ? item.food.name_vn : item.food.name) : item.food.name}}
+                            </span>
+                        </ng-template>
+                    </p>
+                </div>
+            </div>
+            <div class="product-shop" *ngIf="more_info_wine.shops_of_product.length > 0">
+                <div class="content-top">
+                    <h3 class="title">{{getTranslate('available_in')}} {{more_info_wine.shops_of_product.length}} {{getTranslate('shops')}}</h3>
+                    <span class="how-to-buy" [tooltip]="getTranslate('how_to_buy_is_coming_later')">
+                        &nbsp;{{getTranslate('how_to_buy')}}
+                    </span>
+                </div>
+                <div class="list-shop">
+                    <div class="row">
+                        <div class="shop-grid">
+                            <ng-template ngFor let-item [ngForOf]="more_info_wine.shops_of_product" let-i="index" [ngForTrackBy]="trackByFn">
+                                <div class="shop">
+                                    <p class="name">
+                                        {{item.shop.displayed_name}}
+                                    </p>
+                                    <p class="name-in-the-shop">
+                                        {{item.name_in_the_shop}}
+                                    </p>
+                                    <p class="price">
+                                        {{item.price | number}} VND
+                                    </p>
+                                    <span class="address">
+                                        {{item.shop.displayed_address}}
+                                    </span>
+                                    <a [href]="item.shop.displayed_link" target="_blank" class="btn btn-rw">
+                                        {{getTranslate('buy')}} {{getTranslate('from')}}<br>
+                                        Now.vn
+                                    </a>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-review">
+                <h3 class="title">{{getTranslate('community_reviews')}}</h3>
+                <div class="list-review">
+                    <div class="row">
+                        <ng-template ngFor let-item [ngForOf]="more_info_wine.comments" let-i="index" [ngForTrackBy]="trackByFn">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="i < amount_review_show">
+                                <div class="review">
+                                    <div class="user-info">
+                                        <a [href]="'https://www.vivino.com/users/' + item.user.seo_name" target="_blank">
+                                            <div class="img">
+                                                <img [src]="item.user.image.location" [alt]="item.user.alias" [title]="item.user.alias">
+                                                <span class="expertise">{{showUserExpertise(item.user.statistics.ratings_count)}}</span>
+                                            </div>
+                                            <div class="user-info-right">
+                                                <p class="expertise">
+                                                    {{showUserExpertise(item.user.statistics.ratings_count)}}
+                                                </p>
+                                                <p class="user-name">
+                                                    {{item.user.alias}}
+                                                </p>
+                                                <p class="count-rating d-none d-md-block" *ngIf="item.user.statistics">
+                                                    {{item.user.statistics.ratings_count}} {{getTranslate('ratings')}}
+                                                </p>
+                                                <p class="count-rating d-block d-lg-none d-md-none" *ngIf="item.user.statistics">
+                                                    {{item.user.statistics.ratings_count}} {{getTranslate('ratings')}}
+                                                </p>
+                                                <p class="date d-none d-md-block">
+                                                    {{getTranslate('rated_on')}} {{item.vivino_created_at | date :'yyyy/MM/dd'}}
+                                                </p>
+                                                <div class="rating d-block d-lg-none d-md-none">
+                                                    <div class="">
+                                                        <i class="fa" aria-hidden="true"
+                                                        [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                                        <i class="fa" aria-hidden="true"
+                                                            [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                                        <i class="fa" aria-hidden="true"
+                                                            [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                                        <i class="fa" aria-hidden="true"
+                                                            [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                                        <i class="fa" aria-hidden="true"
+                                                            [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i>
+                                                    </div>
+                                                    {{getTranslate('rated_on')}} {{item.vivino_created_at | date :'yyyy/MM/dd'}}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="rating d-none d-md-block">
+                                            <i class="fa" aria-hidden="true"
+                                            [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                            <i class="fa" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                            <i class="fa" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                            <i class="fa" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                            <i class="fa" aria-hidden="true"
+                                                [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i>
+                                        </div>
+                                        <div class="content">
+                                            {{translate.getDefaultLang() === 'vi' ? (item.content_vn !== null ? item.content_vn : item.content) : item.content}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <div class="read-more text-center">
+                            <a [routerLink]="more_info_wine.slug" target="_blank">
+                                {{getTranslate('product_detail_read_more')}} <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-summary">
+                <h3 class="title">{{getTranslate('summary')}}</h3>
+                <div class="list-summary">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="more_info_wine.displayed_vivino_food !== null && more_info_wine.displayed_vivino_food !== '' || more_info_wine.foods_of_product.length > 0">
+                            <img src="/assets/img/icon/foodpair.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('food_pairings')}}</p>
+                                <span>{{translate.getDefaultLang() === 'en' ? showFoods(more_info_wine) : showFoods2(more_info_wine)}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="more_info_wine.displayed_vivino_grape !== null && more_info_wine.displayed_vivino_grape !== '' || more_info_wine.vivino_grapes.length > 0">
+                            <img src="/assets/img/icon/Grapes.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('grapes')}}</p>
+                                <span>{{showGrapes(more_info_wine)}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="more_info_wine.vivino_region !== null">
+                            <img src="/assets/img/icon/region.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('region')}}</p>
+                                <span>{{more_info_wine.vivino_region.name}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary">
+                            <img src="/assets/img/icon/alcohol.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('alcohol')}}</p>
+                                <span>{{more_info_wine.alcohol && more_info_wine.alcohol > 0 ? (more_info_wine.alcohol + '%') : 'Wine typical'}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="more_info_wine.vivino_winery">
+                            <img src="/assets/img/icon/Winery.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('winery')}}</p>
+                                <span>{{more_info_wine.vivino_winery.name}}</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="more_info_wine.vivino_style !== null">
+                            <img src="/assets/img/icon/sty.svg" alt="">
+                            <div class="info">
+                                <p>{{getTranslate('regional_styles')}}</p>
+                                <span>{{more_info_wine.vivino_style.name}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <span class="report">{{getTranslate('home_des_end')}}</span>
+            </div>
+            <div class="product-des-end">
+                <a aria-label="Close" (click)="modalMoreInfoRef.hide()" class="d-none d-md-block">
+                    <i class="fa fa-times" aria-hidden="true"></i> {{getTranslate('close')}}
+                </a>
+                <span>
+                    <a href="https://t.me/ritewine" target="_blank">{{getTranslate('the_shop_does_not_sell_it')}} <b style="text-decoration: underline;">Telegram</b> {{getTranslate('and_win_a_botte_every_month')}}</a>
+                </span>
+                <a aria-label="Close" (click)="modalMoreInfoRef.hide()" class="close-modal d-block d-lg-none d-md-none">
+                    <i class="fa fa-times" aria-hidden="true"></i> {{getTranslate('close')}}
+                </a>
+            </div>
+        </div>
+    </div>
+</ng-template>

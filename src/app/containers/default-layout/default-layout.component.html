@@ -1,0 +1,203 @@
+<div class="wrapper">
+	<header class="main-header">
+		<div class="container-header">
+			<div class="container">
+				<div class="header-content navbar row  justify-content-between align-items-center">
+					<div class="logo">
+						<a href="/">
+							<img src="/assets/img/logo.png" alt="RiteWine" title="RiteWine">
+						</a>
+					</div>
+					<div class="food d-none d-lg-block d-md-block dropdown" *ngIf="show_ele">
+						<span class="dropdown-toggle" id="dropdownFood" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="list_food_selected.length === 0">
+							<img src="/assets/img/icon/food.svg" alt="">{{getTranslate('header_food_pairings')}}
+						</span>
+						<span class="dropdown-toggle" id="dropdownFood" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" *ngIf="list_food_selected.length > 0">
+							<img src="/assets/img/icon/food.svg" alt="">
+							<span class="food-selected" [ngClass]="{
+								'more-food-selected': list_food_selected.length > 1
+							}">{{showListFoodsSelected()}}</span>
+							<span *ngIf="list_food_selected.length > 1" class="count-list-food-selected">, +{{list_food_selected.length - 1}}</span>
+						</span>
+						<div class="dropdown-menu list-food" aria-labelledby="dropdownFood">
+							<ul>
+								<span class="arrow_box"></span>
+								<!-- <li role="menuitem">
+									<a class="dropdown-item" (click)="changeFood('all')" [ngClass]="{
+										'active': choose_all_foods
+									}">
+										<img src="/assets/img/icon/food.svg" alt=""> {{translate.getDefaultLang() === 'en' ? 'All meals' : 'Tất cả'}}
+										<i class="fa fa-check" aria-hidden="true" *ngIf="choose_all_foods"></i>
+									</a>
+								</li> -->
+								<ng-template ngFor let-food [ngForOf]="listFoods" let-i="index" [ngForTrackBy]="trackByFn">
+									<li role="menuitem" *ngIf="food.id !== null">
+										<a class="dropdown-item" (click)="changeFood(food)" [ngClass]="{
+											'active': checkFoodInArray(food)
+										}">
+											<img [src]="food.icon" alt=""> {{translate.getDefaultLang() === 'en' ? food.name : (food.name_vn !== null && food.name_vn !== '' ? food.name_vn : food.name)}}
+											<i class="fa fa-check" aria-hidden="true" *ngIf="checkFoodInArray(food)"></i>
+										</a>
+									</li>
+								</ng-template>
+								<!-- <div class="amout-wine">
+									<button class="btn btn-rw" (click)="hiddenFoodDropdown()">{{getTranslate('show_me')}}</button>
+									<span>{{amout_product}} {{getTranslate('wines_available')}}</span>
+								</div> -->
+							</ul>
+						</div>
+					</div>
+					<div class="search d-none d-lg-block d-md-block d-sm-block" *ngIf="show_ele">
+						<input type="text" name="displayed_name" id="displayed_name" [(ngModel)]="displayed_name" class="form-control"
+							[placeholder]="getTranslate('search')">
+						<span id="icon-search" class="rw-color" (click)="changeDisplayedName(displayed_name)">
+							<i class="fa fa-search" aria-hidden="true"></i>
+						</span>
+					</div>
+					<div class="social d-none d-md-block d-lg-none d-xs-none" *ngIf="show_ele">
+						<ul>
+							<li>
+								<a href="https://www.facebook.com/ritewinevietnam/" class="rw-color" target="_blank">
+									<img src="/assets/img/icon/facebook-red.svg" alt="Facebook">
+								</a>
+							</li>
+							<li>
+								<a href="https://t.me/ritewine" class="rw-color" target="_blank">
+									<img src="/assets/img/icon/telegram-red.svg" alt="Telegram">
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="city" *ngIf="show_ele">
+						<div class="select-local">
+							<div dropdown>
+								<div class="dropdown-toggle" id="local-dropdown" dropdownToggle
+								aria-controls="dropdown-local">Ho Chi Minh</div>
+								<div class="dropdown-menu" *dropdownMenu aria-labelledby="local-dropdown" id="dropdown-local">
+									<div class="dropdown-item">
+										<span class="name col">Ho Chi Minh</span>
+									</div>
+									<div class="dropdown-item disabled" style="cursor: not-allowed;">
+										<span class="name col">Coming soon</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="language d-none d-lg-block">
+						<div class="language-left">
+							<div class="social">
+								<ul>
+									<li>
+										<a href="https://www.facebook.com/ritewinevietnam/" class="rw-color" target="_blank">
+											<img src="/assets/img/icon/facebook-red.svg" alt="Facebook">
+										</a>
+									</li>
+									<li>
+										<a href="https://t.me/ritewine" class="rw-color" target="_blank">
+											<img src="/assets/img/icon/telegram-red.svg" alt="Telegram">
+										</a>
+									</li>
+								</ul>
+							</div>
+							<span class="d-none d-lg-block">{{getTranslate('header_language')}}: </span>
+						</div>
+						<div class="language-right">
+							<img src="/assets/img/icon/vietnam.svg" alt="" [ngClass]="{
+								'opacity-05' : translate.getDefaultLang() === 'en'
+							}" (click)="changeLanguage('vi')">
+							<img src="/assets/img/icon/english.svg" alt="" [ngClass]="{
+								'opacity-05' : translate.getDefaultLang() === 'vi'
+							}" (click)="changeLanguage('en')">
+						</div>
+					</div>
+					<div class="language d-block d-lg-none" dropdown>
+						<div class="dropdown-toggle" id="language-dropdown" dropdownToggle
+						aria-controls="dropdown-language">
+							<img [src]="'/assets/img/icon/' + (translate.getDefaultLang() === 'en' ? 'english' : 'vietnam') + '.svg'" alt="">
+						</div>
+						<div class="dropdown-menu" *dropdownMenu aria-labelledby="language-dropdown" id="dropdown-language">
+							<div class="dropdown-item">
+								<img src="/assets/img/icon/vietnam.svg" alt="" (click)="changeLanguage('vi')">
+							</div>
+							<div class="dropdown-item">
+								<img src="/assets/img/icon/english.svg" alt=""(click)="changeLanguage('en')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="clearfix"></div>
+	<router-outlet></router-outlet>
+	<div class="clearfix"></div>
+	<div class="trust">
+		<div class="container">
+			<div class="des text-center">
+				{{getTranslate('footer_content_des')}}
+			</div>
+			<div class="list-trust">
+				<div class="trust-item">
+					<div class="trust-icon">
+						<img src="/assets/img/icon/medal.svg" alt="">
+					</div>
+					<div class="trust-content">
+						<p>{{getTranslate('footer_medal_title')}}</p>
+						{{getTranslate('footer_medal_content')}}
+					</div>
+				</div>
+				<div class="trust-item">
+					<div class="trust-icon">
+						<img src="/assets/img/icon/truck.svg" alt="">
+					</div>
+					<div class="trust-content">
+						<p>{{getTranslate('footer_truck_title')}}</p>
+						{{getTranslate('footer_truck_content')}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-7 col-md-12 left">
+					<ul>
+						<li class="faqs">
+							<a routerLink="/faqs">FAQs</a>
+						</li>
+						<li class="social">
+							<a>{{getTranslate('footer_folow_us')}}:</a>
+							<a href="https://www.facebook.com/ritewinevietnam/" class="rw-color" target="_blank">
+								<i class="fa fa-facebook-official" aria-hidden="true"></i>
+							</a>
+							<a href="https://t.me/ritewine" class="rw-color" target="_blank">
+								<i class="fa fa-telegram" aria-hidden="true"></i>
+							</a>
+						</li>
+						<li class="email">
+							<a href="mailto:hello@ritewine.com" target="_blank">Email: hello@ritewine.com</a>
+						</li>
+						<li class="policy d-block d-lg-none">
+							<a href="">{{getTranslate('footer_policy_and_privacy')}}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-12 col-lg-5 col-md-12 right">
+					<span class="copy-right">
+						<a href="">Copyright © 2019 RiteWine</a> 
+					</span>
+					<span class="policy d-none d-lg-block">
+						<a href="">{{getTranslate('footer_policy_and_privacy')}}</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
+<div id="topcontrol" class="topcontrol">
+	<span class="btn btn-rw" >
+		Top <i class="fa fa-long-arrow-up" aria-hidden="true"></i>
+	</span>
+</div>

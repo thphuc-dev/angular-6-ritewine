@@ -1,0 +1,259 @@
+<div class="animated fadeIn product-detail-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="product-info">
+                        <div class="info d-block d-md-none d-lg-none" *ngIf="!info_loading">
+                            <h1 class="title">
+                                {{displayed_name}}
+                            </h1>
+                            <p class="region" *ngIf="winery">{{getTranslate('by')}} {{winery}}</p>
+                            <p class="country-wine-type">
+                                <span class="country" *ngIf="country">
+                                    <img [src]="'https://images.vivino.com/web/flags/' + country.code + '.svg'" alt=""> {{translate.getDefaultLang() === 'vi' ? (country.name_vn === null ? country.name : country.name_vn) : country.name}}
+                                </span>
+                                <span class="wine-type">
+                                    <span [ngClass]="{
+                                        'red': displayed_vivino_wine_type === 'Red Wine',
+                                        'white': displayed_vivino_wine_type === 'White Wine',
+                                        'rose': displayed_vivino_wine_type === 'Rosé Wine',
+                                        'sparkling': displayed_vivino_wine_type === 'Sparkling'
+                                    }"></span> {{showNameWineType()}}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="img" [style.backgroundImage]="showBgColor(displayed_vivino_wine_type)">
+                            <div class="show-img" [style.backgroundImage]="'url(' + (picture && picture !== null ? picture : 'https://www.vivino.com/packs/0777cbd0118d2c70617f0e12b5a365db.svg') + ')'">
+                            </div>
+                            <div class="loading" *ngIf="picture_loading">
+                                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                <span class="sr-only">Loading...</span> 
+                            </div>
+                            <img [src]="picture && picture !== null ? picture : 'https://www.vivino.com/packs/0777cbd0118d2c70617f0e12b5a365db.svg'" [alt]="name" class="d-none">
+                        </div>
+                        <div class="info" *ngIf="info_loading">
+                            <div class="loading">
+                                <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+                                <span class="sr-only">Loading...</span> 
+                            </div>
+                        </div>
+                        <div class="info" *ngIf="!info_loading">
+                            <h1 class="title d-none d-md-block d-lg-block">
+                                {{displayed_name}}
+                            </h1>
+                            <p class="region d-none d-md-block d-lg-block" *ngIf="winery">{{getTranslate('by')}} {{winery}}</p>
+                            <p class="country-wine-type d-none d-md-block d-lg-block">
+                                <span class="country" *ngIf="country">
+                                    <img [src]="'https://images.vivino.com/web/flags/' + country.code + '.svg'" alt=""> {{translate.getDefaultLang() === 'vi' ? (country.name_vn === null ? country.name : country.name_vn) : country.name}}
+                                </span>
+                                <span class="wine-type">
+                                    <span [ngClass]="{
+                                        'red': displayed_vivino_wine_type === 'Red Wine',
+                                        'white': displayed_vivino_wine_type === 'White Wine',
+                                        'rose': displayed_vivino_wine_type === 'Rosé Wine',
+                                        'sparkling': displayed_vivino_wine_type === 'Sparkling'
+                                    }"></span> {{showNameWineType()}}
+                                </span>
+                            </p>
+                            <p class="price">
+                                {{price | number}} VND
+                            </p>
+                            <p class="rating" *ngIf="rating" (click)="scrollToReview(review)">
+                                {{rating}} 
+                                <i class="fa rw-color" aria-hidden="true"
+                                [ngClass]="{'fa-star' : rating >= 1, 'fa-star-o' : rating < 0.5, 'fa-star-half-o' : rating >= 0.5 && rating < 1}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : rating >= 2, 'fa-star-o' : rating < 1.5, 'fa-star-half-o' : rating >= 1.5 && rating < 2}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : rating >= 3, 'fa-star-o' : rating < 2.5, 'fa-star-half-o' : rating >= 2.5 && rating < 3}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : rating >= 4, 'fa-star-o' : rating < 3.5, 'fa-star-half-o' : rating >= 3.5 && rating < 4}"></i>
+                                <i class="fa rw-color" aria-hidden="true"
+                                    [ngClass]="{'fa-star' : rating === 5, 'fa-star-o' : rating < 4.5, 'fa-star-half-o' : rating >= 4.5 && rating < 5}"></i>
+                                <em>{{reviews}} {{getTranslate('ratings')}}</em>
+                            </p>
+                            <p class="food">
+                                <ng-template ngFor let-item [ngForOf]="food_1" let-i="index" [ngForTrackBy]="trackByFn">
+                                    <span>
+                                        <img [src]="item.food.icon" [alt]="item.food.name"> {{translate.getDefaultLang() === 'vi' ? (item.food.name_vn !== null || item.food.name_vn !== '' ? item.food.name_vn : item.food.name) : item.food.name}}
+                                    </span>
+                                </ng-template>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="product-shop" *ngIf="list_shops.length > 0">
+                        <div class="content-top">
+                            <h3 class="title">{{getTranslate('available_in')}} {{list_shops.length}} {{getTranslate('shops')}}</h3>
+                            <span class="how-to-buy" [tooltip]="getTranslate('how_to_buy_is_coming_later')">
+                                &nbsp;{{getTranslate('how_to_buy')}}
+                            </span>
+                            <span class="d-none d-lg-block">
+                                {{getTranslate('the_shop_does_not_sell_it')}} <b style="text-decoration: underline;"><a href="https://t.me/ritewine" target="_blank">Telegram</a></b> {{getTranslate('and_win_a_botte_every_month')}}
+                            </span>
+                        </div>
+                        <div class="list-shop">
+                            <div class="row">
+                                <div class="shop-grid">
+                                    <ng-template ngFor let-item [ngForOf]="list_shops" let-i="index" [ngForTrackBy]="trackByFn">
+                                        <div class="shop" *ngIf="!item.not_in_use">
+                                            <p class="name">
+                                                {{item.shop.displayed_name}}
+                                            </p>
+                                            <span class="name-in-the-shop">
+                                                {{item.name_in_the_shop}}
+                                            </span>
+                                            <span class="price">
+                                                {{item.price | number}} VND
+                                            </span>
+                                            <span class="address">
+                                                {{item.shop.displayed_address}}
+                                            </span>
+                                            <a [href]="item.shop.displayed_link" target="_blank" class="btn btn-rw">
+                                                {{getTranslate('buy')}} {{getTranslate('from')}}<br>
+                                                Now.vn
+                                            </a>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-summary">
+                        <h3 class="title">{{getTranslate('summary')}}</h3>
+                        <div class="list-summary">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="food_2">
+                                    <img src="../../../assets/img/icon/foodpair.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('food_pairings')}}</p>
+                                        <span>{{translate.getDefaultLang() === 'vi' ? food_3 : food_2}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="grape">
+                                    <img src="../../../assets/img/icon/Grapes.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('grapes')}}</p>
+                                        <span>{{grape}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="region">
+                                    <img src="../../../assets/img/icon/region.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('region')}}</p>
+                                        <span>{{region}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary">
+                                    <img src="../../../assets/img/icon/alcohol.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('alcohol')}}</p>
+                                        <span>{{alcohol > 0 ? (alcohol + '%') : 'Wine typical'}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="winery">
+                                    <img src="../../../assets/img/icon/Winery.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('winery')}}</p>
+                                        <span>{{winery}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 item-summary" *ngIf="regional_styles">
+                                    <img src="../../../assets/img/icon/sty.svg" alt="">
+                                    <div class="info">
+                                        <p>{{getTranslate('regional_styles')}}</p>
+                                        <span>{{regional_styles}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <span class="report">{{getTranslate('home_des_end')}}</span>
+                    </div>
+                    <div class="product-review" #review>
+                        <h3 class="title">{{getTranslate('community_reviews')}}</h3>
+                        <div class="list-review">
+                            <div class="row">
+                                <ng-template ngFor let-item [ngForOf]="list_reviews" let-i="index" [ngForTrackBy]="trackByFn">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="i < amount_review_show">
+                                        <div class="review">
+                                            <div class="user-info">
+                                                <a [href]="'https://www.vivino.com/users/' + item.user.seo_name" target="_blank">
+                                                    <div class="img">
+                                                        <img [src]="item.user.image.location" [alt]="item.user.alias" [title]="item.user.alias">
+                                                        <span class="expertise">{{showUserExpertise(item.user.statistics.ratings_count)}}</span>
+                                                    </div>
+                                                    <div class="user-info-right">
+                                                        <p class="expertise">
+                                                            {{showUserExpertise(item.user.statistics.ratings_count)}}
+                                                        </p>
+                                                        <p class="user-name">
+                                                            {{item.user.alias}}
+                                                        </p>
+                                                        <p class="count-rating d-none d-md-block" *ngIf="item.user.statistics">
+                                                            {{item.user.statistics.ratings_count}} {{getTranslate('ratings')}}
+                                                        </p>
+                                                        <p class="count-rating d-block d-lg-none d-md-none" *ngIf="item.user.statistics">
+                                                            ({{item.user.statistics.ratings_count}} {{getTranslate('ratings')}})
+                                                        </p>
+                                                        <p class="date d-none d-md-block">
+                                                            {{getTranslate('rated_on')}} {{item.vivino_created_at | date :'yyyy/MM/dd'}}
+                                                        </p>
+                                                        <div class="rating d-block d-lg-none d-md-none">
+                                                            <div class="">
+                                                                <i class="fa" aria-hidden="true"
+                                                                [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                                                <i class="fa" aria-hidden="true"
+                                                                    [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                                                <i class="fa" aria-hidden="true"
+                                                                    [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                                                <i class="fa" aria-hidden="true"
+                                                                    [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                                                <i class="fa" aria-hidden="true"
+                                                                    [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i>
+                                                            </div>
+                                                            {{getTranslate('rated_on')}} {{item.vivino_created_at | date :'yyyy/MM/dd'}}
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="review-content">
+                                                <div class="rating d-none d-md-block">
+                                                    <i class="fa" aria-hidden="true"
+                                                    [ngClass]="{'fa-star' : item.rating >= 1, 'fa-star-o' : item.rating < 0.5, 'fa-star-half-o' : item.rating >= 0.5 && item.rating < 1}"></i>
+                                                    <i class="fa" aria-hidden="true"
+                                                        [ngClass]="{'fa-star' : item.rating >= 2, 'fa-star-o' : item.rating < 1.5, 'fa-star-half-o' : item.rating >= 1.5 && item.rating < 2}"></i>
+                                                    <i class="fa" aria-hidden="true"
+                                                        [ngClass]="{'fa-star' : item.rating >= 3, 'fa-star-o' : item.rating < 2.5, 'fa-star-half-o' : item.rating >= 2.5 && item.rating < 3}"></i>
+                                                    <i class="fa" aria-hidden="true"
+                                                        [ngClass]="{'fa-star' : item.rating >= 4, 'fa-star-o' : item.rating < 3.5, 'fa-star-half-o' : item.rating >= 3.5 && item.rating < 4}"></i>
+                                                    <i class="fa" aria-hidden="true"
+                                                        [ngClass]="{'fa-star' : item.rating === 5, 'fa-star-o' : item.rating < 4.5, 'fa-star-half-o' : item.rating >= 4.5 && item.rating < 5}"></i>
+                                                </div>
+                                                <div class="content">
+                                                    {{translate.getDefaultLang() === 'vi' ? (item.content_vn !== null ? item.content_vn : item.content) : item.content}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="read-more text-center">
+                            <a target="_blank" [href]="vivino_url" *ngIf="amount_list_reviews <= 5 || amount_review_show === 10">
+                                {{getTranslate('product_detail_read_more_on_vivino')}} <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                            <a href="javascript:void(0)" *ngIf="amount_review_show !== 10 && amount_list_reviews > 5" (click)="showMoreReview()">
+                                {{getTranslate('product_detail_read_more')}} <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-des-end d-block d-lg-none">
+                        {{getTranslate('the_shop_does_not_sell_it')}} <b style="text-decoration: underline;"><a href="https://t.me/ritewine" target="_blank">Telegram</a></b> {{getTranslate('and_win_a_botte_every_month')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

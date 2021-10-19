@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="20px" viewBox="0 0 28 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 59.1 (101010) - https://sketch.com -->
+    <title>0A2276E1-9C98-47DE-B798-6A7AC49C56AA</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="28" height="20" rx="4"></rect>
+    </defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Food-Pairings" transform="translate(-1204.000000, -26.000000)">
+            <g id="Header">
+                <g id="Icon/Vietnamese" transform="translate(1204.000000, 26.000000)">
+                    <g id="vietnam-(1)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Mask" fill="#D8D8D8" xlink:href="#path-1"></use>
+                        <g mask="url(#mask-2)" fill-rule="nonzero" id="Path">
+                            <g transform="translate(-1.000000, 0.000000)">
+                                <path d="M27.7558594,0.0148809524 L2.24414062,0.0148809524 C1.0078125,0.0148809524 0,1.0327381 0,2.29464286 L0,17.6994048 C0,18.9613095 1.0078125,19.9791667 2.24414062,19.9791667 L27.75,19.9791667 C28.9921875,19.9791667 29.994166,18.9553571 29.994166,17.6994048 L29.994166,2.29464286 C30,1.0327381 28.9921875,0.0148809524 27.7558594,0.0148809524 Z" fill="#FF4B55"></path>
+                                <path d="M15.2402344,4.04464286 L16.6230469,8.25892857 L20.9941406,8.29464286 C21.2402344,8.29464286 21.3398438,8.61607143 21.140625,8.75892857 L17.625,11.3958333 L18.9433594,15.6279762 C19.0195313,15.8660714 18.75,16.0625 18.5507813,15.9136905 L15,13.3363095 L11.4433594,15.9196429 C11.2441406,16.0625 10.9804688,15.8660714 11.0507813,15.6339286 L12.3691406,11.4017857 L8.85351563,8.76488095 C8.65429688,8.61607143 8.75976563,8.30059524 9,8.30059524 L13.3710938,8.26488095 L14.7539063,4.05059524 C14.8359375,3.80654762 15.1640625,3.80654762 15.2402344,4.04464286 Z" fill="#FFE15A"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
